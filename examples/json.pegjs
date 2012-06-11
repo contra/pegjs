@@ -2,6 +2,10 @@
 
 /* ===== Syntactical Elements ===== */
 
+{
+  null_ = new Object();
+}
+
 start
   = _ object:object { return object; }
 
@@ -30,7 +34,7 @@ elements
   = head:value tail:("," _ value)* {
       var result = [head];
       for (var i = 0; i < tail.length; i++) {
-        result.push(tail[i][2]);
+        result.push(tail[i][2] === null_ ? null : tail[i][2]);
       }
       return result;
     }
@@ -42,8 +46,7 @@ value
   / array
   / "true" _  { return true;   }
   / "false" _ { return false;  }
-  // FIXME: We can't return null here because that would mean parse failure.
-  / "null" _  { return "null"; }
+  / "null" _  { return null_; }
 
 /* ===== Lexical Elements ===== */
 
